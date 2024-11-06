@@ -125,6 +125,7 @@ class LabwareRole(str, Enum):
     fixture = "fixture"
     adapter = "adapter"
     maintenance = "maintenance"
+    stackableOnly = "stackableOnly"
     lid = "lid"
 
 

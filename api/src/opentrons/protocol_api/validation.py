@@ -17,7 +17,7 @@ from typing_extensions import TypeGuard
 from opentrons_shared_data.labware.labware_definition import LabwareRole
 from opentrons_shared_data.pipette.types import PipetteNameType
 from opentrons_shared_data.robot.types import RobotType
-
+from opentrons.protocol_engine.types import LabwareLocation, NonStackedLocation
 from opentrons.protocols.api_support.types import APIVersion, ThermocyclerStep
 from opentrons.protocols.api_support.util import APIVersionError
 from opentrons.protocols.models import LabwareDefinition
@@ -81,6 +81,10 @@ class LabwareDefinitionIsNotAdapterError(ValueError):
 
 class LabwareDefinitionIsNotLabwareError(ValueError):
     """An error raised when a labware is not loaded using `load_labware`."""
+
+
+class LabwareDefinitionIsNotLoadableOnPosition(ValueError):
+    """An error raised when a labware is not able to be loaded at the location."""
 
 
 class InvalidTrashBinLocationError(ValueError):
@@ -250,6 +254,20 @@ def ensure_definition_is_labware(definition: LabwareDefinition) -> None:
     if definition.allowedRoles and LabwareRole.labware not in definition.allowedRoles:
         raise LabwareDefinitionIsNotLabwareError(
             f"Labware {definition.parameters.loadName} is not defined as a normal labware."
+        )
+
+
+def ensure_labware_is_loadable(
+    definition: LabwareDefinition, location: LabwareLocation
+) -> None:
+    """Ensure that one of the definition's allowed roles is `stackableOnly` and that the location is a `NonStackedLocation`."""
+    if (
+        definition.allowedRoles
+        and LabwareRole.stackableOnly in definition.allowedRoles
+        and isinstance(location, NonStackedLocation)
+    ):
+        raise LabwareDefinitionIsNotLoadableOnPosition(
+            f"Labware {definition.parameters.loadName} cannot be loaded on {location}."
         )
 
 

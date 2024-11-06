@@ -228,6 +228,7 @@ class ProtocolCore(
             )
         )
         # FIXME(jbl, 2023-08-14) validating after loading the object issue
+        validation.ensure_labware_is_loadable(load_result.definition, load_location)
         validation.ensure_definition_is_labware(load_result.definition)
 
         # FIXME(mm, 2023-02-21):
