@@ -13,7 +13,7 @@ import {
   StyledText,
   TYPOGRAPHY,
 } from '@opentrons/components'
-import { getTopPortalEl } from '../../components/portals/TopPortal'
+import { getMainPagePortalEl } from '../Portal'
 
 export function DisabledScreen(): JSX.Element {
   const { t } = useTranslation('shared')
@@ -55,6 +55,6 @@ export function DisabledScreen(): JSX.Element {
         </Flex>
       </Flex>
     </ModalShell>,
-    getTopPortalEl()
+    getMainPagePortalEl()
   )
 }

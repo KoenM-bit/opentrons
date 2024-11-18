@@ -20,7 +20,7 @@ import { selectors } from '../../../../labware-ingred/selectors'
 import {
   MIXED_WELL_COLOR,
   swatchColors,
-} from '../../../../components/swatchColors'
+} from '../../../../organisms/DefineLiquidsModal/swatchColors'
 import { compactPreIngreds, formatVolume } from './utils'
 import type { AdditionalEquipmentName } from '@opentrons/step-generation'
 

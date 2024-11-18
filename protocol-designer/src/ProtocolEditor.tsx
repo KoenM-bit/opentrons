@@ -2,10 +2,10 @@ import { DndProvider } from 'react-dnd'
 import { HashRouter } from 'react-router-dom'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DIRECTION_COLUMN, Flex, OVERFLOW_AUTO } from '@opentrons/components'
-import { PortalRoot as TopPortalRoot } from './components/portals/TopPortal'
+
 import { ProtocolRoutes } from './ProtocolRoutes'
 import { useScreenSizeCheck } from './resources/useScreenSizeCheck'
-import { DisabledScreen } from './organisms/DisabledScreen'
+import { PortalRoot, DisabledScreen } from './organisms'
 
 function ProtocolEditorComponent(): JSX.Element {
   const isValidSize = useScreenSizeCheck()
@@ -14,7 +14,7 @@ function ProtocolEditorComponent(): JSX.Element {
       id="protocol-editor"
       style={{ width: '100%', height: '100vh', overflow: OVERFLOW_AUTO }}
     >
-      <TopPortalRoot />
+      <PortalRoot />
       <Flex flexDirection={DIRECTION_COLUMN}>
         {!isValidSize && <DisabledScreen />}
         <HashRouter>

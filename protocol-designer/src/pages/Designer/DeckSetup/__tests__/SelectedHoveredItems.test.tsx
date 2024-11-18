@@ -13,7 +13,7 @@ import { Module } from '@opentrons/components'
 import { selectors } from '../../../../labware-ingred/selectors'
 import { getInitialDeckSetup } from '../../../../step-forms/selectors'
 import { getCustomLabwareDefsByURI } from '../../../../labware-defs/selectors'
-import { LabwareOnDeck } from '../../../../components/DeckSetup/LabwareOnDeck'
+import { LabwareOnDeck } from '../../../../organisms'
 import { FixtureRender } from '../FixtureRender'
 import { SelectedHoveredItems } from '../SelectedHoveredItems'
 import type * as OpentronsComponents from '@opentrons/components'
@@ -23,7 +23,7 @@ vi.mock('../../../../step-forms/selectors')
 vi.mock('../FixtureRender')
 vi.mock('../../../../labware-ingred/selectors')
 vi.mock('../../../../labware-defs/selectors')
-vi.mock('../../../../components/DeckSetup/LabwareOnDeck')
+vi.mock('../../../../organisms')
 vi.mock('@opentrons/components', async importOriginal => {
   const actual = await importOriginal<typeof OpentronsComponents>()
   return {
