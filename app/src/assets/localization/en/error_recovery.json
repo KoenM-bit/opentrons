@@ -96,6 +96,7 @@
   "skip_to_next_step_same_tips": "Skip to next step with same tips",
   "skipping_to_step_succeeded": "Skipping to step {{step}} succeeded.",
   "skipping_to_step_succeeded_na": "Skipping to next step succeeded.",
+  "stall_or_collision_error": "Stall or collision",
   "stand_back": "Stand back, robot is in motion",
   "stand_back_picking_up_tips": "Stand back, picking up tips",
   "stand_back_resuming": "Stand back, resuming current step",

@@ -20,6 +20,7 @@ export const DEFINED_ERROR_TYPES = {
   TIP_PHYSICALLY_MISSING: 'tipPhysicallyMissing',
   TIP_PHYSICALLY_ATTACHED: 'tipPhysicallyAttached',
   GRIPPER_MOVEMENT: 'gripperMovement',
+  STALL_OR_COLLISION: 'stallOrCollision',
 }
 
 // Client-defined error-handling flows.
@@ -32,6 +33,7 @@ export const ERROR_KINDS = {
   TIP_NOT_DETECTED: 'TIP_NOT_DETECTED',
   TIP_DROP_FAILED: 'TIP_DROP_FAILED',
   GRIPPER_ERROR: 'GRIPPER_ERROR',
+  STALL_OR_COLLISION: 'STALL_OR_COLLISION',
 } as const
 
 // TODO(jh, 06-14-24): Consolidate motion routes to a single route with several steps.
