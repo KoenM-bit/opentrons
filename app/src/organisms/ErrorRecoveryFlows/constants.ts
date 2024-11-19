@@ -57,6 +57,13 @@ export const RECOVERY_MAP = {
       DROP_TIP_GENERAL_ERROR: 'drop-tip-general-error',
     },
   },
+  HOME_AND_RETRY: {
+    ROUTE: 'home-and-retry',
+    STEPS: {
+      HOME_BEFORE_RETRY: 'home-before-retry',
+      CONFIRM_RETRY: 'confirm-retry',
+    },
+  },
   ROBOT_CANCELING: {
     ROUTE: 'robot-cancel-run',
     STEPS: {
@@ -212,6 +219,7 @@ const {
   MANUAL_REPLACE_AND_RETRY,
   SKIP_STEP_WITH_NEW_TIPS,
   SKIP_STEP_WITH_SAME_TIPS,
+  HOME_AND_RETRY,
 } = RECOVERY_MAP
 
 // The deterministic ordering of steps for a given route.
@@ -279,6 +287,10 @@ export const STEP_ORDER: StepOrder = {
     ERROR_WHILE_RECOVERING.STEPS.DROP_TIP_TIP_DROP_FAILED,
     ERROR_WHILE_RECOVERING.STEPS.DROP_TIP_BLOWOUT_FAILED,
   ],
+  [HOME_AND_RETRY.ROUTE]: [
+    HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY,
+    HOME_AND_RETRY.STEPS.CONFIRM_RETRY,
+  ],
 }
 
 // Contains metadata specific to all routes and/or steps.
@@ -334,6 +346,10 @@ export const RECOVERY_MAP_METADATA: RecoveryRouteStepMetadata = {
   },
   [ROBOT_DOOR_OPEN.ROUTE]: {
     [ROBOT_DOOR_OPEN.STEPS.DOOR_OPEN]: { allowDoorOpen: false },
+  },
+  [HOME_AND_RETRY.ROUTE]: {
+    [HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY]: { allowDoorOpen: true },
+    [HOME_AND_RETRY.STEPS.CONFIRM_RETRY]: { allowDoorOpen: true },
   },
   [ROBOT_DOOR_OPEN_SPECIAL.ROUTE]: {
     [ROBOT_DOOR_OPEN_SPECIAL.STEPS.DOOR_OPEN]: { allowDoorOpen: true },
