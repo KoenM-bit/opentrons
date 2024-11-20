@@ -7,8 +7,8 @@ import traceback
 import plotly.graph_objects as go
 
 global baseline_x, baseline_y
-baseline_x = 'baseline_x'
-baseline_z = 'baseline_z'
+baseline_x = 'baseline_x.json'
+baseline_z = 'baseline_z.json'
 
 global options
 options = ['Make Baseline', 'Validate Labware', 'Plot Baseline']
@@ -27,7 +27,6 @@ def plot_baseline():
         fig = go.Figure()
         for zone in baseline_dict:
             zone_data = baseline_dict[zone]
-            print(zone_data)
             fig.add_trace(go.Scatter(x=bins, y=zone_data, mode='lines', name=f'Zone {zone}'))
 
         # Customize layout
@@ -75,7 +74,7 @@ def create_baseline(df_path, axis):
 
                 # Extract bin values for the current zone and bin_label
                 bin_vals = sample_df.loc[sample_df['Zone'] == float(zone), bin_label].tolist()
-                zones[zone][bin_str].extend(bin_vals)  # Efficiently append values
+                zones[zone][bin_str].extend(bin_vals)
 
     for zone in zones:   
         if zone not in return_zones:
@@ -132,7 +131,7 @@ def process_data(data):
             bin_averages = []
         for bin_label in zones[zone]:
             list_vals = zones[zone][bin_label]
-            mean = sum(list_vals)
+            mean = sum(list_vals)/len(list_vals)
             bin_averages.append(mean)
         return_zones[zone] = bin_averages
         # print(return_zones)
@@ -212,5 +211,3 @@ def menu():
             sys.exit(1)
 if __name__ == '__main__':
     menu()
-
-    
