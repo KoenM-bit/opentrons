@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import statistics
 import os
+import sys
 import traceback
 import plotly.graph_objects as go
 
@@ -14,17 +15,19 @@ options = ['Make Baseline', 'Validate Labware', 'Plot Baseline']
 
 def plot_baseline():
     baselines = [baseline_x, baseline_z]
-    bins = list(range(128))  # X-axis: Bin numbers (0 to 127)
+    bins = list(range(1, 129))  # X-axis: Bin numbers (1 to 128)
     for baseline in baselines:
         try:
             file = open(baseline, 'r')
         except:
             raise
+
         baseline_dict = json.load(file)
         # Create line traces for each zone
         fig = go.Figure()
         for zone in baseline_dict:
             zone_data = baseline_dict[zone]
+            print(zone_data)
             fig.add_trace(go.Scatter(x=bins, y=zone_data, mode='lines', name=f'Zone {zone}'))
 
         # Customize layout
@@ -80,7 +83,7 @@ def create_baseline(df_path, axis):
             bin_thresholds = []
         for bin_label in zones[zone]:
             list_vals = zones[zone][bin_label]
-            mean = sum(list_vals)
+            mean = sum(list_vals)/len(list_vals)
             std = statistics.pstdev(list_vals)
             threshold = mean+(6*std)
             bin_thresholds.append(threshold)
@@ -207,7 +210,6 @@ def menu():
         except:
             print('No baseline data, run \'Make Baseline\' first')
             sys.exit(1)
-
 if __name__ == '__main__':
     menu()
 
