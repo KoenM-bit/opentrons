@@ -86,8 +86,11 @@ export function BeginRemoval({
         RETRY_NEW_TIPS.ROUTE,
         RETRY_NEW_TIPS.STEPS.REPLACE_TIPS
       )
-    } else if (selectedRecoveryOption == HOME_AND_RETRY.ROUTE) {
-      goBackPrevStep()
+    } else if (selectedRecoveryOption === HOME_AND_RETRY.ROUTE) {
+      void proceedToRouteAndStep(
+        HOME_AND_RETRY.ROUTE,
+        HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY
+      )
     } else {
       void handleMotionRouting(true, ROBOT_CANCELING.ROUTE).then(() => {
         cancelRun()
