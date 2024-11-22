@@ -65,10 +65,11 @@ export function BeginRemoval({
     proceedNextStep,
     handleMotionRouting,
     proceedToRouteAndStep,
+    goBackPrevStep,
   } = routeUpdateActions
   const { cancelRun } = recoveryCommands
   const { selectedRecoveryOption } = currentRecoveryOptionUtils
-  const { ROBOT_CANCELING, RETRY_NEW_TIPS } = RECOVERY_MAP
+  const { ROBOT_CANCELING, RETRY_NEW_TIPS, HOME_AND_RETRY } = RECOVERY_MAP
   const mount = aPipetteWithTip?.mount
 
   const primaryOnClick = (): void => {
@@ -81,6 +82,8 @@ export function BeginRemoval({
         RETRY_NEW_TIPS.ROUTE,
         RETRY_NEW_TIPS.STEPS.REPLACE_TIPS
       )
+    } else if (selectedRecoveryOption == HOME_AND_RETRY.ROUTE) {
+      goBackPrevStep()
     } else {
       void handleMotionRouting(true, ROBOT_CANCELING.ROUTE).then(() => {
         cancelRun()
@@ -149,7 +152,12 @@ function DropTipFlowsContainer(
     recoveryCommands,
     currentRecoveryOptionUtils,
   } = props
-  const { DROP_TIP_FLOWS, ROBOT_CANCELING, RETRY_NEW_TIPS } = RECOVERY_MAP
+  const {
+    DROP_TIP_FLOWS,
+    ROBOT_CANCELING,
+    RETRY_NEW_TIPS,
+    HOME_AND_RETRY,
+  } = RECOVERY_MAP
   const { proceedToRouteAndStep, handleMotionRouting } = routeUpdateActions
   const { selectedRecoveryOption } = currentRecoveryOptionUtils
   const { setTipStatusResolved } = tipStatusUtils
@@ -162,6 +170,11 @@ function DropTipFlowsContainer(
       void proceedToRouteAndStep(
         RETRY_NEW_TIPS.ROUTE,
         RETRY_NEW_TIPS.STEPS.REPLACE_TIPS
+      )
+    } else if (selectedRecoveryOption === HOME_AND_RETRY.ROUTE) {
+      void proceedToRouteAndStep(
+        HOME_AND_RETRY.ROUTE,
+        HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY
       )
     } else {
       void setTipStatusResolved(onEmptyCache, onTipsDetected)
@@ -336,6 +349,7 @@ function routeAlternativelyIfNoPipette(props: RecoveryContentProps): void {
     RETRY_NEW_TIPS,
     SKIP_STEP_WITH_NEW_TIPS,
     OPTION_SELECTION,
+    HOME_AND_RETRY,
   } = RECOVERY_MAP
 
   if (tipStatusUtils.aPipetteWithTip == null)
@@ -351,6 +365,13 @@ function routeAlternativelyIfNoPipette(props: RecoveryContentProps): void {
         proceedToRouteAndStep(
           selectedRecoveryOption,
           SKIP_STEP_WITH_NEW_TIPS.STEPS.REPLACE_TIPS
+        )
+        break
+      }
+      case HOME_AND_RETRY.ROUTE: {
+        proceedToRouteAndStep(
+          selectedRecoveryOption,
+          HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY
         )
         break
       }
