@@ -34,7 +34,7 @@ export function ManageTips(props: RecoveryContentProps): JSX.Element {
   routeAlternativelyIfNoPipette(props)
 
   const buildContent = (): JSX.Element => {
-    const { DROP_TIP_FLOWS } = RECOVERY_MAP
+    const { DROP_TIP_FLOWS, HOME_AND_RETRY } = RECOVERY_MAP
     const { step, route } = recoveryMap
 
     switch (step) {
@@ -44,8 +44,12 @@ export function ManageTips(props: RecoveryContentProps): JSX.Element {
       case DROP_TIP_FLOWS.STEPS.CHOOSE_BLOWOUT:
       case DROP_TIP_FLOWS.STEPS.CHOOSE_TIP_DROP:
         return <DropTipFlowsContainer {...props} />
+      case HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE:
+        return <BeginRemoval {...props} />
       default:
-        console.warn(`${step} in ${route} not explicitly handled. Rerouting.`)
+        console.warn(
+          `ManageTips: ${step} in ${route} not explicitly handled. Rerouting.`
+        )
         return <SelectRecoveryOption {...props} />
     }
   }
