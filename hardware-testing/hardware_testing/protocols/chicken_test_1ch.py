@@ -10,7 +10,7 @@ TIP_LOCATION = "D6"
 def run(ctx: protocol_context.ProtocolContext) -> None:
     pipette = ctx.load_instrument(
         instrument_name="flex_1channel_50",
-        mount="left"
+        mount="right"
     )
     tip_rack = ctx.load_labware(
         load_name="opentrons_flex_96_tiprack_200ul",
