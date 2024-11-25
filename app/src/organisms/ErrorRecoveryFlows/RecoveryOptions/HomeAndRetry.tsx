@@ -1,8 +1,11 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { LegacyStyledText } from '@opentrons/components'
 import { RECOVERY_MAP } from '../constants'
-import { TwoColTextAndFailedStepNextStep } from '../shared'
-import { RetryStep } from './RetryStep'
+import {
+  TwoColTextAndFailedStepNextStep,
+  RecoveryDoorOpenSpecial,
+  RetryStepInfo,
+} from '../shared'
 import { ManageTips } from './ManageTips'
 import { SelectRecoveryOption } from './SelectRecoveryOption'
 
@@ -22,8 +25,11 @@ export function HomeAndRetry(props: RecoveryContentProps): JSX.Element {
     case HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY: {
       return <HomeGantryBeforeRetry {...props} />
     }
+    case HOME_AND_RETRY.STEPS.CLOSE_DOOR_AND_HOME: {
+      return <RecoveryDoorOpenSpecial {...props} />
+    }
     case HOME_AND_RETRY.STEPS.CONFIRM_RETRY: {
-      return <RetryStep {...props} />
+      return <RetryAfterHome {...props} />
     }
     default:
       console.warn(
@@ -31,6 +37,36 @@ export function HomeAndRetry(props: RecoveryContentProps): JSX.Element {
       )
       return <SelectRecoveryOption {...props} />
   }
+}
+
+export function RetryAfterHome(props: RecoveryContentProps): JSX.Element {
+  const { recoveryMap, routeUpdateActions } = props
+  const { step, route } = recoveryMap
+  const { HOME_AND_RETRY } = RECOVERY_MAP
+  const { proceedToRouteAndStep } = routeUpdateActions
+
+  const buildContent = (): JSX.Element => {
+    switch (step) {
+      case HOME_AND_RETRY.STEPS.CONFIRM_RETRY:
+        return (
+          <RetryStepInfo
+            {...props}
+            secondaryBtnOnClickOverride={() =>
+              proceedToRouteAndStep(
+                HOME_AND_RETRY.ROUTE,
+                HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY
+              )
+            }
+          />
+        )
+      default:
+        console.warn(
+          `RetryStep: ${step} in ${route} not explicitly handled. Rerouting.`
+        )
+        return <SelectRecoveryOption {...props} />
+    }
+  }
+  return buildContent()
 }
 
 export function PrepareDeckForHome(props: RecoveryContentProps): JSX.Element {
@@ -64,9 +100,8 @@ export function HomeGantryBeforeRetry(
   props: RecoveryContentProps
 ): JSX.Element {
   const { t } = useTranslation('error_recovery')
-  const { recoveryCommands, routeUpdateActions } = props
-  const { homeExceptPlungers } = recoveryCommands
-  const { handleMotionRouting, proceedToRouteAndStep } = routeUpdateActions
+  const { routeUpdateActions } = props
+  const { proceedToRouteAndStep } = routeUpdateActions
   const { HOME_AND_RETRY } = RECOVERY_MAP
   const buildBodyText = (): JSX.Element => (
     <Trans
@@ -76,15 +111,10 @@ export function HomeGantryBeforeRetry(
     />
   )
   const primaryBtnOnClick = (): Promise<void> =>
-    handleMotionRouting(true)
-      .then(() => homeExceptPlungers())
-      .then(() =>
-        proceedToRouteAndStep(
-          HOME_AND_RETRY.ROUTE,
-          HOME_AND_RETRY.STEPS.CONFIRM_RETRY
-        )
-      )
-      .then(() => handleMotionRouting(false))
+    proceedToRouteAndStep(
+      HOME_AND_RETRY.ROUTE,
+      HOME_AND_RETRY.STEPS.CLOSE_DOOR_AND_HOME
+    )
   return (
     <TwoColTextAndFailedStepNextStep
       {...props}
