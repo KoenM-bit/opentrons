@@ -354,7 +354,7 @@ export const RECOVERY_MAP_METADATA: RecoveryRouteStepMetadata = {
   [HOME_AND_RETRY.ROUTE]: {
     [HOME_AND_RETRY.STEPS.PREPARE_DECK_FOR_HOME]: { allowDoorOpen: true },
     [HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE]: { allowDoorOpen: true },
-    [HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY]: { allowDoorOpen: false },
+    [HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY]: { allowDoorOpen: true },
     [HOME_AND_RETRY.STEPS.CONFIRM_RETRY]: { allowDoorOpen: true },
   },
   [ROBOT_DOOR_OPEN_SPECIAL.ROUTE]: {
