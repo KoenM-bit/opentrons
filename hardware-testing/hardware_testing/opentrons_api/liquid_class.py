@@ -1,7 +1,7 @@
 """Liquid Class helpers."""
-from typing import List, Any
+from typing import List, Any, Dict
 
-from opentrons_shared_data.liquid_classes import liquid_class_definition as lcd
+from opentrons_shared_data.liquid_classes import liquid_class_definition as lcd, load_definition
 
 # EXPORT requirements:
 #   - display entire contents (figure out layout manually)
@@ -11,45 +11,40 @@ from opentrons_shared_data.liquid_classes import liquid_class_definition as lcd
 DELIMITER = "\t"
 LINE_END = "\n"
 
-META_DATA_KEYS_V1 = [
-    "liquidClassName",
-    "displayName",
-    "schemaVersion",
-    "namespace"
-]
-
 
 def _list_to_csv_line(*data: Any) -> str:
     return DELIMITER.join([str(d) for d in data]) + LINE_END
 
 
-def _attribute_to_csv_line(subclass_instance: Any, name: str) -> str:
-    return _list_to_csv_line(name, getattr(subclass_instance, name))
+def _sort_liquid_class_dict(obj: Dict[str, Any]) -> Dict[str, Any]:
+    ret = {}
+    # first get all simple values, add them first so their on top
+    _attr_added = []
+    try:
+        for attr, val in obj.items():
+            if isinstance(val, str) or isinstance(val, int) or isinstance(val, float):
+                ret[attr] = val
+        # then grab the "by-volume" values
+        for attr, val in obj.items():
+            if "ByVolume" in attr:
+                ret[attr] = {}
+                for vol, by_vol_val in val:
+                    ret[attr][vol] = by_vol_val
+        for attr, val in obj.items():
+            if "byPipette" in attr:
+                ret[attr] = {}
+                for
+        # finally, get all the DICT values and recursively part them too
+        for attr, val in obj.items():
+            if not ret.get(attr):
+                ret[attr] = _sort_liquid_class_dict(val)
+        return ret
+    finally:
+        print(obj)
 
 
-def _meta_to_csv(lc: lcd.LiquidClassSchemaV1) -> List[str]:
-    return [
-        _attribute_to_csv_line(lc, key)
-        for key in lc.dict().keys()
-        if key != "byPipette"
-    ]
-
-
-def _pipette_to_csv(pipette: lcd.ByPipetteSetting) -> List[str]:
-    pip_model_line = [_attribute_to_csv_line(pipette, "pipetteModel")]
-    for tip in pipette.byTipType:
-        tiprack_line = _attribute_to_csv_line(tip, "tiprack")
-        aspirate_lines = [
-            "submerge"
-        ]
-    return pip_model_line + tip_lines
-
-
-def generate_csv(lc: lcd.LiquidClassSchemaV1) -> List[str]:
-    meta_lines = _meta_to_csv(lc)
-    pipette_lines = [
-        _pipette_to_csv(pipette)
-        for pipette in lc.byPipette
-    ]
-    return meta_lines + pipette_lines
-
+def gcs(load_name: str) -> Dict[str, Any]:
+    lc_as_dict = _sort_liquid_class_dict(load_definition(load_name).dict())
+    from pprint import pprint
+    pprint(lc_as_dict)
+    return lc_as_dict

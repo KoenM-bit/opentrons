@@ -6,7 +6,7 @@
   "byPipette": [
     {
       "pipetteModel": "flex_1channel_50",
-      "byTipType": [
+      "byTipType": [g
         {
           "tiprack": "opentrons_flex_96_tiprack_50ul",
           "aspirate": {
