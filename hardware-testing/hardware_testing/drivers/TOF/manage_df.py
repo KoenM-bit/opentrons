@@ -3,6 +3,7 @@ import os
 import configparser
 import hashlib
 import json
+import sys
 import pandas as pd
 import google_sheets_helper
 
@@ -24,7 +25,8 @@ def get_configs():
     credentials_path = configurations['Drive']['credentials']
     drive_folder = configurations['Drive']['folder']
     email = configurations['Drive']['email']
-    return(drive_folder, credentials_path, email)
+    sheet = configurations['Drive']['sheet']
+    return(drive_folder, credentials_path, email, sheet)
 
 def generate_hash(values):
     combined_string = "".join(values)
@@ -133,7 +135,6 @@ def get_files(credentials_path, drive_folder, email, stacker_configuration=None)
             folder_name = folder_names.pop(0)
             folder_path = folder_paths.pop(0)
             if folder_name not in exclude:
-                # Pass a copy of the current stack configuration to the recursive call
                 get_files(credentials_path, folder_path, email, stacker_configuration + [folder_name])
     else:
         files = google_drive.list_folder()
@@ -151,9 +152,28 @@ def get_files(credentials_path, drive_folder, email, stacker_configuration=None)
             append_file(name, path, stacker_configuration, labware_stacked, google_drive=google_drive)
 
         
-
-def download_data(credentials_path, drive_folder, email):
-    get_files(credentials_path, drive_folder, email)
+def download_df(file_name, credentials_path, sheet_name):
+    sheet = google_sheets_helper.google_sheet(credentials_path, sheet_name, 0)
+    columns = [
+        "Hash_id",
+        "Stacker Name",
+        "Axis",
+        "Serial",
+        "Cover?",
+        "Labware Name",
+        "Test",
+        "Labware Num",
+        "Labware Stacked",
+        "Values",
+    ]
+    data = sheet.get_all_data(expected_headers=columns)
+    data_df = pd.DataFrame(data)
+    print(data_df)
+    data_df.to_csv('TOF_raw_data_df.csv', index=False)
+    
+def download_data(file_name, credentials_path, sheet_name):
+    # get_files(credentials_path, drive_folder, email)
+    download_df(file_name, credentials_path, sheet_name)
 
 
 def update_sheet(data: dict, sheet_name):
@@ -174,7 +194,7 @@ def update_sheet(data: dict, sheet_name):
 
 
 if __name__ == '__main__':
-    drive_folder, credentials_path, email = get_configs()
+    drive_folder, credentials_path, email, sheet = get_configs()
     df_name = 'TOF_raw_data_df.csv'
     df_path = os.path.join(os.curdir, df_name)
     if(not os.path.exists(df_path)):
@@ -183,7 +203,7 @@ if __name__ == '__main__':
     print(drive_folder)
     print(credentials_path)
     print(email)
-    download_data(credentials_path, drive_folder, email)
+    download_data(df_name, credentials_path, sheet)
     df = pd.read_csv(df_name)
     stackers = df['Stacker Name']
     print(stackers)

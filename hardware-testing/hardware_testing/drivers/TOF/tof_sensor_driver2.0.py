@@ -399,10 +399,14 @@ if __name__ == '__main__':
                 data_path = sensor.log_histogram(args.log, True, i)
                 print(data_path)
                 sensor.plot_log(True, i)
-                if(validate_labware.sense_labware(axis, data_path)):
-                    print('LABWARE!')
-                else:
-                    print('NO LABWARE ;(')
+                df = pd.read_csv(data_path)
+                try:
+                    if(validate_labware.sense_labware(axis, df)):
+                        print('LABWARE!')
+                    else:
+                        print('NO LABWARE ;(')
+                except:
+                    print('baseline not found')
             # Save and validate
             curr_dir = os.curdir
             logs = os.path.join(curr_dir, "tof_log")
