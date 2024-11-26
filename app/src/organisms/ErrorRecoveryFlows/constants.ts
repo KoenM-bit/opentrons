@@ -62,6 +62,8 @@ export const RECOVERY_MAP = {
     STEPS: {
       PREPARE_DECK_FOR_HOME: 'prepare-deck-for-home',
       REMOVE_TIPS_FROM_PIPETTE: 'remove-tips-from-pipette',
+      REPLACE_TIPS: 'replace-tips',
+      SELECT_TIPS: 'select-tips',
       HOME_BEFORE_RETRY: 'home-before-retry',
       CLOSE_DOOR_AND_HOME: 'close-door-and-home',
       CONFIRM_RETRY: 'confirm-retry',
@@ -293,6 +295,8 @@ export const STEP_ORDER: StepOrder = {
   [HOME_AND_RETRY.ROUTE]: [
     HOME_AND_RETRY.STEPS.PREPARE_DECK_FOR_HOME,
     HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE,
+    HOME_AND_RETRY.STEPS.REPLACE_TIPS,
+    HOME_AND_RETRY.STEPS.SELECT_TIPS,
     HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY,
     HOME_AND_RETRY.STEPS.CLOSE_DOOR_AND_HOME,
     HOME_AND_RETRY.STEPS.CONFIRM_RETRY,
@@ -356,6 +360,8 @@ export const RECOVERY_MAP_METADATA: RecoveryRouteStepMetadata = {
   [HOME_AND_RETRY.ROUTE]: {
     [HOME_AND_RETRY.STEPS.PREPARE_DECK_FOR_HOME]: { allowDoorOpen: true },
     [HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE]: { allowDoorOpen: true },
+    [HOME_AND_RETRY.STEPS.REPLACE_TIPS]: { allowDoorOpen: true },
+    [HOME_AND_RETRY.STEPS.SELECT_TIPS]: { allowDoorOpen: true },
     [HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY]: { allowDoorOpen: true },
     [HOME_AND_RETRY.STEPS.CLOSE_DOOR_AND_HOME]: { allowDoorOpen: true },
     [HOME_AND_RETRY.STEPS.CONFIRM_RETRY]: { allowDoorOpen: true },

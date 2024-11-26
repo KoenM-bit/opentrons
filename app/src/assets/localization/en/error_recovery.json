@@ -63,6 +63,7 @@
   "pipette_overpressure": "Pipette overpressure",
   "prepare_deck_for_homing": "Prepare deck for homing",
   "proceed_to_cancel": "Proceed to cancel",
+  "proceed_to_home": "Proceed to home",
   "proceed_to_tip_selection": "Proceed to tip selection",
   "recovery_action_failed": "{{action}} failed",
   "recovery_mode": "Recovery Mode",
