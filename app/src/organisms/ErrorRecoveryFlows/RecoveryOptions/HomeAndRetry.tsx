@@ -13,15 +13,16 @@ import type { RecoveryContentProps } from '../types'
 
 const { HOME_AND_RETRY } = RECOVERY_MAP
 export function HomeAndRetry(props: RecoveryContentProps): JSX.Element {
-  const { recoveryMap } = props
+  const { recoveryMap, routeUpdateActions } = props
   const { route, step } = recoveryMap
+  const { proceedToRouteAndStep } = routeUpdateActions
   switch (step) {
     case HOME_AND_RETRY.STEPS.PREPARE_DECK_FOR_HOME: {
       return <PrepareDeckForHome {...props} />
     }
-    case HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE: {
+    /*case HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE: {
       return <ManageTips {...props} />
-    }
+    }*/
     case HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY: {
       return <HomeGantryBeforeRetry {...props} />
     }
@@ -75,8 +76,8 @@ export function PrepareDeckForHome(props: RecoveryContentProps): JSX.Element {
   const { proceedToRouteAndStep } = routeUpdateActions
   const primaryBtnOnClick = (): Promise<void> =>
     proceedToRouteAndStep(
-      RECOVERY_MAP.HOME_AND_RETRY.ROUTE,
-      RECOVERY_MAP.HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE
+      RECOVERY_MAP.DROP_TIP_FLOWS.ROUTE,
+      RECOVERY_MAP.DROP_TIP_FLOWS.STEPS.MANAGE_TIPS
     )
   const buildBodyText = (): JSX.Element => (
     <Trans

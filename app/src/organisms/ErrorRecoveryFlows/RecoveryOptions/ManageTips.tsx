@@ -228,6 +228,7 @@ export function useDropTipFlowUtils({
     SKIP_STEP_WITH_NEW_TIPS,
     ERROR_WHILE_RECOVERING,
     DROP_TIP_FLOWS,
+    HOME_AND_RETRY,
   } = RECOVERY_MAP
   const { runId, gripperErrorFirstPipetteWithTip } = tipStatusUtils
   const { step } = recoveryMap
@@ -261,6 +262,13 @@ export function useDropTipFlowUtils({
           routeTo(
             selectedRecoveryOption,
             SKIP_STEP_WITH_NEW_TIPS.STEPS.REPLACE_TIPS
+          )
+        }
+      case HOME_AND_RETRY.ROUTE:
+        return () => {
+          routeTo(
+            selectedRecoveryOption,
+            HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY
           )
         }
       default:
