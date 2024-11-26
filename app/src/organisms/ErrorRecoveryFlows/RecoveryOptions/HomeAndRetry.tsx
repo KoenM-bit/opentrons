@@ -79,12 +79,14 @@ export function RetryAfterHome(props: RecoveryContentProps): JSX.Element {
 
 export function PrepareDeckForHome(props: RecoveryContentProps): JSX.Element {
   const { t } = useTranslation('error_recovery')
-  const { routeUpdateActions } = props
+  const { routeUpdateActions, tipStatusUtils } = props
   const { proceedToRouteAndStep } = routeUpdateActions
   const primaryBtnOnClick = (): Promise<void> =>
     proceedToRouteAndStep(
       RECOVERY_MAP.HOME_AND_RETRY.ROUTE,
-      RECOVERY_MAP.HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE
+      tipStatusUtils.areTipsAttached
+        ? RECOVERY_MAP.HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE
+        : RECOVERY_MAP.HOME_AND_RETRY.STEPS.HOME_BEFORE_RETRY
     )
   const buildBodyText = (): JSX.Element => (
     <Trans
@@ -108,7 +110,7 @@ export function HomeGantryBeforeRetry(
   props: RecoveryContentProps
 ): JSX.Element {
   const { t } = useTranslation('error_recovery')
-  const { routeUpdateActions } = props
+  const { routeUpdateActions, tipStatusUtils } = props
   const { proceedToRouteAndStep } = routeUpdateActions
   const { HOME_AND_RETRY } = RECOVERY_MAP
   const buildBodyText = (): JSX.Element => (
@@ -118,6 +120,14 @@ export function HomeGantryBeforeRetry(
       components={{ block: <LegacyStyledText as="p" /> }}
     />
   )
+  const secondaryBtnOnClick = (): Promise<void> =>
+    proceedToRouteAndStep(
+      RECOVERY_MAP.HOME_AND_RETRY.ROUTE,
+      tipStatusUtils.areTipsAttached
+        ? RECOVERY_MAP.HOME_AND_RETRY.STEPS.REMOVE_TIPS_FROM_PIPETTE
+        : RECOVERY_MAP.HOME_AND_RETRY.STEPS.PREPARE_DECK_FOR_HOME
+    )
+
   const primaryBtnOnClick = (): Promise<void> =>
     proceedToRouteAndStep(
       HOME_AND_RETRY.ROUTE,
@@ -130,6 +140,7 @@ export function HomeGantryBeforeRetry(
       leftColBodyText={buildBodyText()}
       primaryBtnCopy={t('home_now')}
       primaryBtnOnClick={primaryBtnOnClick}
+      secondaryBtnOnClickOverride={secondaryBtnOnClick}
     />
   )
 }
